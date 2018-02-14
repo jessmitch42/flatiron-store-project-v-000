@@ -25,7 +25,7 @@ describe 'Feature Test: Cart', :type => :feature do
        visit cart_path(@user.current_cart)
        expect(page).to have_button("Checkout")
      end
-
+# *******WHY DOES THE CART CHECKOUT REDIRECT TO CART...
      it "redirects to cart show page on Checkout" do
        visit cart_path(@user.current_cart)
        click_button("Checkout")
@@ -47,7 +47,7 @@ describe 'Feature Test: Cart', :type => :feature do
        expect(@first_item.inventory).to eq(first_item_inventory_before-1)
        expect(@second_item.inventory).to eq(second_item_inventory_before-3)
      end
-
+# ********** ... IF CURRENT CART IS SET TO NIL ON CHECKOUT
      it "sets current_cart to nil on checkout" do
        visit cart_path(@user.current_cart)
        click_button("Checkout")
