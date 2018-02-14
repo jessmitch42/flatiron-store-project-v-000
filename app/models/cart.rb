@@ -4,22 +4,32 @@ class Cart < ActiveRecord::Base
   has_many :items, through: :line_items
 
   def total
-    self.items.reduce(0) { |sum, obj| sum + obj.price }
+    self.line_items.reduce(0) { |sum, obj| sum + (obj.item.price * obj.quantity) }
   end
 
   def add_item(item_id, quantity = 1)
-    existing = LineItem.find_by(cart_id: self.id, item_id: item_id)
-    if existing
-      existing.update(quantity:quantity)
-      existing
+    line_item = self.line_items.find_by(item_id: item_id)
+    if line_item
+      line_item.quantity += 1
+      line_item
     else
-      li = LineItem.new(quantity: quantity, cart_id: self.id, item_id: item_id)
+      self.line_items.build(item_id: item_id, quantity:quantity)
     end
   end
 
-  # def current_cart(current_user)
-  #   Cart.find(user_id: current_user.id, status: "open")
-  # end
+  def checkout_cart
+    self.status = "submitted"
+    inventory_update
+    # binding.pry
+    self.save
+  end
 
+  def inventory_update
+    self.line_items.each do |l|
+      # saves the update directly to the db
+      # Model.update_counters(id of instance being updated, column: new value)
+      Item.update_counters(l.item_id, inventory: -l.quantity)
+    end
+  end
 
 end

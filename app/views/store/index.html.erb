@@ -2,6 +2,9 @@
   <%= link_to category.title, category_path(category) %>
 <% end %>
 
+<br>
+
+<br>
 <% @items.each do |item| %>
-  <p><%= item.title %> | <%= format_price(item.price) %> | <%= button_to 'Add to Cart', line_items_path(item_id: item) %></p>
+  <p><%= item.title %> | <%= format_price(item.price) %> | <%= button_to 'Add to Cart', line_items_path(item_id: item) if current_user %></p>
 <% end %>

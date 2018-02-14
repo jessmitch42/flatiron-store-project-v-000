@@ -6,5 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :carts
-  has_many :line_items, through: :carts
+  #look this up
+  belongs_to :current_cart, class_name: 'Cart'
+
+
 end
